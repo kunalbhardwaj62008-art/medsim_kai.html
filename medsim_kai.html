@@ -1,0 +1,2076 @@
+<!DOCTYPE html>
+<!-- saved from url=(0057)file:///C:/Users/rjshb/Downloads/medsim_access%20(1).html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NeuroCardio MedSim Pro — Access Portal</title>
+<link href="./NeuroCardio MedSim Pro — Access Portal_files/css2" rel="stylesheet">
+<style>
+:root {
+  --g: #00ff88;
+  --g2: #00cc66;
+  --g3: #009944;
+  --b: #00aaff;
+  --r: #ff3344;
+  --w: #ffaa00;
+  --bg: #020806;
+  --bg1: #060f0a;
+  --bg2: #0a150f;
+  --panel: rgba(6,15,10,0.97);
+  --border: rgba(0,255,136,0.2);
+  --border-b: rgba(0,255,136,0.6);
+  --dim: rgba(0,255,136,0.45);
+  --dimmer: rgba(0,255,136,0.18);
+  --mono: 'Share Tech Mono', monospace;
+  --title: 'Orbitron', sans-serif;
+  --ui: 'Exo 2', sans-serif;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body {
+  font-family: var(--ui);
+  background: var(--bg);
+  color: var(--g);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Scanlines overlay */
+body::before {
+  content:''; position:fixed; inset:0; pointer-events:none; z-index:9999;
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.04) 2px, rgba(0,0,0,0.04) 4px);
+}
+
+/* Ambient glow */
+body::after {
+  content:''; position:fixed; inset:0; pointer-events:none; z-index:0;
+  background:
+    radial-gradient(ellipse at 20% 50%, rgba(0,255,136,0.04) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 20%, rgba(0,170,255,0.03) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 90%, rgba(0,255,136,0.03) 0%, transparent 50%);
+}
+
+/* ═══ PAGES ═══ */
+.page { display:none; min-height:100vh; position:relative; z-index:1; }
+.page.active { display:flex; }
+
+/* ═══════════════════════════════════════
+   LOGIN PAGE
+═══════════════════════════════════════ */
+#page-login {
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.login-bg-grid {
+  position: fixed; inset: 0; z-index: 0;
+  background-image:
+    linear-gradient(rgba(0,255,136,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,255,136,0.04) 1px, transparent 1px);
+  background-size: 40px 40px;
+  animation: gridDrift 20s linear infinite;
+}
+@keyframes gridDrift { 0%{background-position:0 0} 100%{background-position:40px 40px} }
+
+.login-card {
+  position: relative; z-index: 2;
+  background: var(--panel);
+  border: 1px solid var(--border-b);
+  border-radius: 6px;
+  padding: 48px 44px;
+  width: 100%;
+  max-width: 440px;
+  box-shadow: 0 0 60px rgba(0,255,136,0.08), 0 0 120px rgba(0,255,136,0.04), inset 0 0 30px rgba(0,0,0,0.5);
+  animation: cardIn 0.6s ease forwards;
+}
+@keyframes cardIn { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+
+.login-card::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:1px;
+  background: linear-gradient(90deg, transparent, var(--g), transparent);
+  animation: topGlow 3s ease-in-out infinite;
+}
+@keyframes topGlow { 0%,100%{opacity:0.4} 50%{opacity:1} }
+
+.brand {
+  text-align: center;
+  margin-bottom: 32px;
+}
+.brand-logo {
+  font-family: var(--title);
+  font-size: 1.1em;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  color: var(--g);
+  text-shadow: 0 0 20px rgba(0,255,136,0.6);
+}
+.brand-logo span { color: var(--b); }
+.brand-sub {
+  font-family: var(--mono);
+  font-size: 0.62em;
+  color: var(--dim);
+  letter-spacing: 0.2em;
+  margin-top: 4px;
+  text-transform: uppercase;
+}
+.brand-line {
+  width: 60px; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--g), transparent);
+  margin: 12px auto 0;
+}
+
+.form-label {
+  font-family: var(--mono);
+  font-size: 0.65em;
+  color: var(--dim);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+  display: block;
+}
+.form-group { margin-bottom: 18px; }
+
+.form-input {
+  width: 100%;
+  background: rgba(0,0,0,0.6);
+  border: 1px solid var(--border);
+  color: var(--g);
+  font-family: var(--mono);
+  font-size: 0.85em;
+  padding: 10px 14px;
+  border-radius: 3px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.form-input:focus {
+  border-color: var(--g);
+  box-shadow: 0 0 12px rgba(0,255,136,0.2);
+}
+.form-input::placeholder { color: var(--dimmer); }
+.form-input option { background: #040c06; }
+
+.role-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 18px;
+  background: rgba(0,0,0,0.4);
+  padding: 4px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+}
+.role-tab {
+  flex: 1;
+  padding: 7px;
+  font-family: var(--mono);
+  font-size: 0.68em;
+  letter-spacing: 0.1em;
+  text-align: center;
+  cursor: pointer;
+  border-radius: 3px;
+  color: var(--dim);
+  transition: all 0.2s;
+  border: 1px solid transparent;
+}
+.role-tab:hover { color: var(--g); background: rgba(0,255,136,0.06); }
+.role-tab.active {
+  color: var(--g);
+  background: rgba(0,255,136,0.12);
+  border-color: var(--border-b);
+  box-shadow: 0 0 8px rgba(0,255,136,0.15);
+}
+
+.btn-primary {
+  width: 100%;
+  padding: 12px;
+  background: rgba(0,255,136,0.08);
+  border: 1px solid var(--g);
+  color: var(--g);
+  font-family: var(--title);
+  font-size: 0.75em;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-radius: 3px;
+  box-shadow: 0 0 16px rgba(0,255,136,0.15);
+  transition: all 0.2s;
+  margin-top: 8px;
+}
+.btn-primary:hover {
+  background: rgba(0,255,136,0.18);
+  box-shadow: 0 0 28px rgba(0,255,136,0.35);
+  transform: translateY(-1px);
+}
+
+.login-footer {
+  margin-top: 24px;
+  text-align: center;
+  font-family: var(--mono);
+  font-size: 0.6em;
+  color: var(--dimmer);
+  letter-spacing: 0.1em;
+}
+.login-footer a { color: var(--g2); cursor: pointer; text-decoration: none; }
+.login-footer a:hover { color: var(--g); }
+
+.system-status {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--mono);
+  font-size: 0.6em;
+  color: var(--dim);
+  z-index: 3;
+  background: rgba(0,0,0,0.6);
+  padding: 6px 14px;
+  border: 1px solid var(--dimmer);
+  border-radius: 20px;
+}
+.pulse-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--g);
+  box-shadow: 0 0 6px var(--g);
+  animation: pulse 1.4s ease-in-out infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+.error-msg {
+  background: rgba(255,51,68,0.1);
+  border: 1px solid rgba(255,51,68,0.4);
+  color: var(--r);
+  font-family: var(--mono);
+  font-size: 0.68em;
+  padding: 8px 12px;
+  border-radius: 3px;
+  margin-bottom: 14px;
+  display: none;
+  letter-spacing: 0.05em;
+}
+.error-msg.show { display: block; animation: shake 0.3s ease; }
+@keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
+
+.success-msg {
+  background: rgba(0,255,136,0.08);
+  border: 1px solid rgba(0,255,136,0.4);
+  color: var(--g);
+  font-family: var(--mono);
+  font-size: 0.68em;
+  padding: 8px 12px;
+  border-radius: 3px;
+  margin-bottom: 14px;
+  display: none;
+  letter-spacing: 0.05em;
+}
+.success-msg.show { display: block; }
+
+/* ═══════════════════════════════════════
+   REQUEST ACCESS PAGE
+═══════════════════════════════════════ */
+#page-request {
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.request-card {
+  position: relative; z-index: 2;
+  background: var(--panel);
+  border: 1px solid var(--border-b);
+  border-radius: 6px;
+  padding: 40px;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0 0 60px rgba(0,255,136,0.08);
+  animation: cardIn 0.6s ease forwards;
+}
+
+/* ═══════════════════════════════════════
+   USER DASHBOARD PAGE
+═══════════════════════════════════════ */
+#page-user {
+  flex-direction: column;
+}
+
+/* ═══════════════════════════════════════
+   OWNER DASHBOARD PAGE
+═══════════════════════════════════════ */
+#page-owner {
+  flex-direction: column;
+}
+
+/* ═══════════════════════════════════════
+   SHARED DASHBOARD STYLES
+═══════════════════════════════════════ */
+.dash-header {
+  height: 52px;
+  background: linear-gradient(90deg, var(--bg2), var(--bg1), var(--bg2));
+  border-bottom: 1px solid var(--border-b);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  position: sticky; top: 0; z-index: 100;
+  flex-shrink: 0;
+}
+.dash-header::after {
+  content:''; position:absolute; bottom:0; left:0; right:0; height:1px;
+  background: linear-gradient(90deg, transparent, var(--g), transparent);
+  animation: topGlow 4s ease-in-out infinite;
+}
+
+.dash-logo {
+  font-family: var(--title);
+  font-size: 0.85em;
+  font-weight: 900;
+  letter-spacing: 0.07em;
+  color: var(--g);
+  text-shadow: 0 0 14px rgba(0,255,136,0.5);
+}
+.dash-logo span { color: var(--b); }
+
+.dash-nav {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.dash-nav-item {
+  font-family: var(--mono);
+  font-size: 0.65em;
+  padding: 5px 10px;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  cursor: pointer;
+  color: var(--dim);
+  transition: all 0.2s;
+  letter-spacing: 0.08em;
+}
+.dash-nav-item:hover, .dash-nav-item.active {
+  color: var(--g);
+  border-color: var(--border);
+  background: rgba(0,255,136,0.07);
+}
+
+.dash-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--mono);
+  font-size: 0.65em;
+  color: var(--dim);
+}
+.user-badge {
+  background: rgba(0,255,136,0.1);
+  border: 1px solid var(--border);
+  padding: 3px 10px;
+  border-radius: 20px;
+  color: var(--g);
+  letter-spacing: 0.05em;
+}
+.owner-badge {
+  background: rgba(255,170,0,0.12);
+  border: 1px solid rgba(255,170,0,0.5);
+  padding: 3px 10px;
+  border-radius: 20px;
+  color: var(--w);
+  letter-spacing: 0.05em;
+  font-size: 0.9em;
+}
+.logout-btn {
+  background: rgba(255,51,68,0.08);
+  border: 1px solid rgba(255,51,68,0.35);
+  color: rgba(255,51,68,0.8);
+  font-family: var(--mono);
+  font-size: 0.62em;
+  padding: 4px 10px;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 0.05em;
+}
+.logout-btn:hover {
+  background: rgba(255,51,68,0.15);
+  border-color: var(--r);
+  color: var(--r);
+}
+
+.dash-body {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+/* ═══════════════════════════════════════
+   STAT CARDS
+═══════════════════════════════════════ */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.stat-card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 14px 16px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.stat-card:hover {
+  border-color: var(--g);
+  box-shadow: 0 0 16px rgba(0,255,136,0.1);
+}
+.stat-label {
+  font-family: var(--title);
+  font-size: 0.48em;
+  letter-spacing: 0.15em;
+  color: var(--dim);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.stat-value {
+  font-family: var(--mono);
+  font-size: 1.8em;
+  color: var(--g);
+  line-height: 1;
+  text-shadow: 0 0 10px rgba(0,255,136,0.4);
+}
+.stat-sub {
+  font-family: var(--mono);
+  font-size: 0.6em;
+  color: var(--dimmer);
+  margin-top: 4px;
+}
+.stat-card.warn .stat-value { color: var(--w); text-shadow: 0 0 10px rgba(255,170,0,0.4); }
+.stat-card.danger .stat-value { color: var(--r); text-shadow: 0 0 10px rgba(255,51,68,0.4); }
+.stat-card.blue .stat-value { color: var(--b); text-shadow: 0 0 10px rgba(0,170,255,0.4); }
+
+/* ═══════════════════════════════════════
+   PANEL SECTIONS
+═══════════════════════════════════════ */
+.section-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+.section-grid.three { grid-template-columns: 1fr 1fr 1fr; }
+.section-grid.wide { grid-template-columns: 2fr 1fr; }
+
+.panel-box {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.panel-title {
+  padding: 9px 14px;
+  font-family: var(--title);
+  font-size: 0.52em;
+  letter-spacing: 0.15em;
+  color: var(--g);
+  border-bottom: 1px solid var(--border);
+  background: rgba(0,0,0,0.4);
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.panel-title::before {
+  content:'';
+  width: 3px; height: 11px;
+  background: var(--g);
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+.panel-title-right {
+  font-family: var(--mono);
+  font-size: 0.85em;
+  color: var(--dim);
+  letter-spacing: 0.05em;
+}
+
+/* ═══════════════════════════════════════
+   USER TABLE
+═══════════════════════════════════════ */
+.user-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.user-table th {
+  font-family: var(--mono);
+  font-size: 0.6em;
+  color: var(--dim);
+  letter-spacing: 0.12em;
+  padding: 8px 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  background: rgba(0,0,0,0.3);
+  text-transform: uppercase;
+}
+.user-table td {
+  font-family: var(--mono);
+  font-size: 0.68em;
+  color: var(--g);
+  padding: 9px 12px;
+  border-bottom: 1px solid var(--dimmer);
+  transition: background 0.15s;
+}
+.user-table tr:hover td { background: rgba(0,255,136,0.04); }
+.user-table tr:last-child td { border-bottom: none; }
+
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-size: 0.85em;
+  letter-spacing: 0.05em;
+}
+.badge-online {
+  background: rgba(0,255,136,0.15);
+  border: 1px solid rgba(0,255,136,0.5);
+  color: var(--g);
+}
+.badge-offline {
+  background: rgba(100,100,100,0.15);
+  border: 1px solid rgba(100,100,100,0.3);
+  color: #666;
+}
+.badge-pending {
+  background: rgba(255,170,0,0.15);
+  border: 1px solid rgba(255,170,0,0.5);
+  color: var(--w);
+}
+.badge-denied {
+  background: rgba(255,51,68,0.12);
+  border: 1px solid rgba(255,51,68,0.4);
+  color: var(--r);
+}
+.badge-viewer { background:rgba(0,170,255,0.12);border:1px solid rgba(0,170,255,0.4);color:var(--b); }
+.badge-operator { background:rgba(170,68,255,0.12);border:1px solid rgba(170,68,255,0.4);color:#bb66ff; }
+.badge-admin { background:rgba(255,170,0,0.12);border:1px solid rgba(255,170,0,0.4);color:var(--w); }
+
+.action-btns { display: flex; gap: 4px; }
+.act-btn {
+  font-family: var(--mono);
+  font-size: 0.75em;
+  padding: 2px 7px;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 1px solid;
+}
+.act-approve {
+  border-color: rgba(0,255,136,0.4);
+  color: rgba(0,255,136,0.8);
+  background: rgba(0,255,136,0.06);
+}
+.act-approve:hover { background: rgba(0,255,136,0.18); border-color: var(--g); color: var(--g); }
+.act-deny {
+  border-color: rgba(255,51,68,0.35);
+  color: rgba(255,51,68,0.7);
+  background: rgba(255,51,68,0.06);
+}
+.act-deny:hover { background: rgba(255,51,68,0.15); border-color: var(--r); color: var(--r); }
+.act-kick {
+  border-color: rgba(255,170,0,0.35);
+  color: rgba(255,170,0,0.7);
+  background: rgba(255,170,0,0.05);
+}
+.act-kick:hover { background: rgba(255,170,0,0.14); border-color: var(--w); color: var(--w); }
+.act-view {
+  border-color: rgba(0,170,255,0.35);
+  color: rgba(0,170,255,0.7);
+  background: rgba(0,170,255,0.05);
+}
+.act-view:hover { background: rgba(0,170,255,0.14); border-color: var(--b); color: var(--b); }
+
+/* ═══════════════════════════════════════
+   MACHINE STATUS
+═══════════════════════════════════════ */
+.machine-card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 14px;
+}
+.machine-header {
+  padding: 10px 14px;
+  background: rgba(0,0,0,0.5);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.machine-name {
+  font-family: var(--title);
+  font-size: 0.7em;
+  letter-spacing: 0.1em;
+  color: var(--g);
+  text-shadow: 0 0 8px rgba(0,255,136,0.3);
+}
+.machine-status-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--g);
+  box-shadow: 0 0 8px var(--g);
+  animation: pulse 1.4s ease-in-out infinite;
+  display: inline-block;
+  margin-right: 6px;
+}
+.machine-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+}
+.machine-metric {
+  padding: 12px 14px;
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.machine-metric:nth-child(4n) { border-right: none; }
+.machine-metric:nth-last-child(-n+4) { border-bottom: none; }
+.metric-lbl {
+  font-family: var(--mono);
+  font-size: 0.55em;
+  color: var(--dim);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.metric-val {
+  font-family: var(--mono);
+  font-size: 1.0em;
+  color: var(--g);
+  font-weight: bold;
+}
+.metric-bar {
+  height: 3px;
+  background: rgba(0,0,0,0.5);
+  border-radius: 2px;
+  margin-top: 5px;
+  overflow: hidden;
+}
+.metric-fill {
+  height: 100%;
+  border-radius: 2px;
+  background: var(--g);
+  transition: width 1s linear;
+}
+
+/* ═══════════════════════════════════════
+   ACTIVITY LOG
+═══════════════════════════════════════ */
+.log-list { padding: 4px 0; max-height: 220px; overflow-y: auto; }
+.log-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 6px 12px;
+  border-bottom: 1px solid var(--dimmer);
+  font-family: var(--mono);
+  font-size: 0.62em;
+  transition: background 0.15s;
+}
+.log-item:hover { background: rgba(0,255,136,0.03); }
+.log-item:last-child { border-bottom: none; }
+.log-time { color: var(--dim); flex-shrink: 0; width: 70px; }
+.log-type {
+  flex-shrink: 0;
+  width: 55px;
+  font-weight: bold;
+}
+.log-type.info { color: var(--b); }
+.log-type.warn { color: var(--w); }
+.log-type.err { color: var(--r); }
+.log-type.ok { color: var(--g); }
+.log-msg { color: rgba(0,255,136,0.75); flex: 1; }
+
+/* ═══════════════════════════════════════
+   PERMISSIONS PANEL
+═══════════════════════════════════════ */
+.perm-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--dimmer);
+  font-family: var(--mono);
+  font-size: 0.65em;
+}
+.perm-row:last-child { border-bottom: none; }
+.perm-name { color: var(--g); }
+.perm-desc { color: var(--dim); font-size: 0.85em; margin-top: 1px; }
+.toggle {
+  width: 36px; height: 18px;
+  border-radius: 9px;
+  background: rgba(0,0,0,0.5);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  position: relative;
+  transition: background 0.2s, border-color 0.2s;
+  flex-shrink: 0;
+}
+.toggle.on {
+  background: rgba(0,255,136,0.2);
+  border-color: var(--g);
+}
+.toggle::after {
+  content:'';
+  position: absolute;
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  background: #555;
+  top: 2px; left: 2px;
+  transition: transform 0.2s, background 0.2s;
+}
+.toggle.on::after {
+  transform: translateX(18px);
+  background: var(--g);
+  box-shadow: 0 0 5px var(--g);
+}
+
+/* ═══════════════════════════════════════
+   ANNOUNCEMENT / MODAL
+═══════════════════════════════════════ */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(2px);
+}
+.modal-overlay.show { display: flex; }
+.modal-box {
+  background: var(--panel);
+  border: 1px solid var(--border-b);
+  border-radius: 5px;
+  padding: 30px 32px;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0 0 60px rgba(0,255,136,0.12);
+  animation: cardIn 0.3s ease;
+}
+.modal-title {
+  font-family: var(--title);
+  font-size: 0.8em;
+  letter-spacing: 0.1em;
+  color: var(--g);
+  margin-bottom: 14px;
+  text-transform: uppercase;
+}
+.modal-body {
+  font-family: var(--mono);
+  font-size: 0.7em;
+  color: var(--dim);
+  line-height: 1.7;
+  margin-bottom: 20px;
+}
+.modal-btns { display: flex; gap: 8px; }
+.modal-btn {
+  flex: 1;
+  padding: 9px;
+  font-family: var(--mono);
+  font-size: 0.7em;
+  cursor: pointer;
+  border-radius: 3px;
+  transition: all 0.2s;
+  letter-spacing: 0.05em;
+}
+.modal-btn-ok {
+  background: rgba(0,255,136,0.1);
+  border: 1px solid var(--g);
+  color: var(--g);
+}
+.modal-btn-ok:hover { background: rgba(0,255,136,0.2); }
+.modal-btn-cancel {
+  background: rgba(0,0,0,0.4);
+  border: 1px solid var(--border);
+  color: var(--dim);
+}
+.modal-btn-cancel:hover { border-color: var(--g); color: var(--g); }
+
+/* ═══════════════════════════════════════
+   USER VIEWER PAGE
+═══════════════════════════════════════ */
+.viewer-frame {
+  width: 100%;
+  flex: 1;
+  border: none;
+  background: #000;
+}
+.viewer-toolbar {
+  height: 44px;
+  background: var(--bg1);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 14px;
+  flex-shrink: 0;
+}
+.viewer-info {
+  font-family: var(--mono);
+  font-size: 0.65em;
+  color: var(--dim);
+}
+.session-timer {
+  font-family: var(--mono);
+  font-size: 0.75em;
+  color: var(--g);
+  letter-spacing: 0.08em;
+}
+.permission-chip {
+  font-family: var(--mono);
+  font-size: 0.58em;
+  padding: 2px 8px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  color: var(--dim);
+}
+.permission-chip.locked {
+  border-color: rgba(255,51,68,0.4);
+  color: rgba(255,51,68,0.7);
+  background: rgba(255,51,68,0.07);
+}
+
+/* ═══════════════════════════════════════
+   BROADCAST / ALERT BANNER
+═══════════════════════════════════════ */
+.broadcast-bar {
+  display: none;
+  background: rgba(255,170,0,0.1);
+  border-bottom: 1px solid rgba(255,170,0,0.4);
+  padding: 6px 16px;
+  font-family: var(--mono);
+  font-size: 0.65em;
+  color: var(--w);
+  letter-spacing: 0.05em;
+  flex-shrink: 0;
+}
+.broadcast-bar.show { display: block; animation: broadIn 0.3s ease; }
+@keyframes broadIn { from{opacity:0;height:0} to{opacity:1;height:auto} }
+
+/* ═══════════════════════════════════════
+   SCROLLBARS
+═══════════════════════════════════════ */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+/* ═══════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════ */
+@media(max-width:768px) {
+  .section-grid { grid-template-columns: 1fr; }
+  .section-grid.three { grid-template-columns: 1fr; }
+  .section-grid.wide { grid-template-columns: 1fr; }
+  .machine-grid { grid-template-columns: repeat(2,1fr); }
+  .stats-row { grid-template-columns: repeat(2,1fr); }
+}
+
+/* Owner announcement textarea */
+.announce-area {
+  width:100%;
+  background:rgba(0,0,0,0.5);
+  border:1px solid var(--border);
+  color:var(--g);
+  font-family:var(--mono);
+  font-size:0.72em;
+  padding:8px 10px;
+  border-radius:3px;
+  resize:vertical;
+  min-height:60px;
+  outline:none;
+}
+.announce-area:focus { border-color:var(--g); box-shadow:0 0 8px rgba(0,255,136,0.15); }
+.announce-area::placeholder { color:var(--dimmer); }
+
+.small-btn {
+  font-family:var(--mono);
+  font-size:0.62em;
+  padding:4px 10px;
+  border-radius:2px;
+  cursor:pointer;
+  transition:all 0.2s;
+  border:1px solid var(--border);
+  color:var(--dim);
+  background:rgba(0,0,0,0.4);
+  letter-spacing:0.05em;
+}
+.small-btn:hover { border-color:var(--g); color:var(--g); background:rgba(0,255,136,0.08); }
+.small-btn.danger { border-color:rgba(255,51,68,0.4);color:rgba(255,51,68,0.7); }
+.small-btn.danger:hover { border-color:var(--r);color:var(--r);background:rgba(255,51,68,0.1); }
+.small-btn.primary { border-color:rgba(0,255,136,0.5);color:var(--g);background:rgba(0,255,136,0.08); }
+.small-btn.primary:hover { background:rgba(0,255,136,0.18); box-shadow:0 0 10px rgba(0,255,136,0.2); }
+
+.flex-row { display:flex;align-items:center;gap:8px; flex-wrap:wrap; }
+.spacer { flex:1; }
+
+select.form-input {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%2300ff88' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  padding-right: 28px;
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════
+     LOGIN PAGE
+═══════════════════════════════════════ -->
+<div id="page-login" class="page active">
+  <div class="login-bg-grid"></div>
+  <div class="login-card">
+    <div class="brand">
+      <div class="brand-logo">NEURO<span>CARDIO</span> MedSim</div>
+      <div class="brand-sub">Access Control Portal · v6.8</div>
+      <div class="brand-line"></div>
+    </div>
+
+    <div class="role-tabs">
+      <div class="role-tab active" onclick="setRole(&#39;user&#39;,this)">👤 User Access</div>
+      <div class="role-tab" onclick="setRole(&#39;owner&#39;,this)">🔑 Owner</div>
+    </div>
+
+    <div id="errorMsg" class="error-msg">⚠ Invalid credentials. Access denied.</div>
+    <div id="successMsg" class="success-msg">✓ Authentication successful. Redirecting...</div>
+
+    <div class="form-group">
+      <label class="form-label">User ID / Email</label>
+      <input class="form-input" type="text" id="loginUser" placeholder="Enter your user ID">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Access Code</label>
+      <input class="form-input" type="password" id="loginPass" placeholder="Enter access code">
+    </div>
+
+    <button class="btn-primary" onclick="doLogin()">⚡ AUTHENTICATE</button>
+
+    <div class="login-footer">
+      <p>Don't have access? <a onclick="showPage(&#39;page-request&#39;)">Request Access →</a></p>
+      
+    </div>
+  </div>
+
+  <div class="system-status">
+    <div class="pulse-dot"></div>
+    <span>MACHINE ONLINE</span>
+    <span style="color:var(--dimmer)">|</span>
+    <span id="loginClock">12:13:56</span>
+    <span style="color:var(--dimmer)">|</span>
+    <span>3 ACTIVE SESSIONS</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     REQUEST ACCESS PAGE
+═══════════════════════════════════════ -->
+<div id="page-request" class="page">
+  <div class="login-bg-grid"></div>
+  <div class="request-card">
+    <div class="brand" style="margin-bottom:24px">
+      <div class="brand-logo" style="font-size:0.9em">REQUEST ACCESS</div>
+      <div class="brand-sub">NeuroCardio MedSim Pro · Access Portal</div>
+      <div class="brand-line"></div>
+    </div>
+
+    <div id="reqSuccess" class="success-msg">✓ Access request submitted. The owner will review and notify you.</div>
+
+    <div class="form-group">
+      <label class="form-label">Full Name</label>
+      <input class="form-input" type="text" id="reqName" placeholder="Dr. Jane Smith">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Email Address</label>
+      <input class="form-input" type="email" id="reqEmail" placeholder="user@hospital.org">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Institution / Department</label>
+      <input class="form-input" type="text" id="reqOrg" placeholder="City Hospital — Cardiology Dept.">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Access Level Requested</label>
+      <select class="form-input" id="reqRole">
+        <option value="viewer">Viewer — View only, no controls</option>
+        <option value="operator">Operator — View + controls</option>
+        <option value="admin">Admin — Full access (requires owner approval)</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Reason for Access</label>
+      <textarea class="form-input announce-area" id="reqReason" placeholder="Briefly describe your use case..."></textarea>
+    </div>
+
+    <div class="flex-row">
+      <button class="small-btn" onclick="showPage(&#39;page-login&#39;)">← Back</button>
+      <div class="spacer"></div>
+      <button class="btn-primary" style="width:auto;padding:10px 24px" onclick="submitRequest()">Submit Request →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     USER DASHBOARD
+═══════════════════════════════════════ -->
+<div id="page-user" class="page">
+  <div class="dash-header">
+    <div class="dash-logo">NEURO<span>CARDIO</span> MedSim</div>
+    <div class="dash-nav">
+      <div class="dash-nav-item active" onclick="setUserTab(&#39;tab-overview&#39;,this)">Overview</div>
+      <div class="dash-nav-item" onclick="setUserTab(&#39;tab-launch&#39;,this)">Launch Machine</div>
+      <div class="dash-nav-item" onclick="setUserTab(&#39;tab-sessions&#39;,this)">My Sessions</div>
+    </div>
+    <div class="dash-right">
+      <span class="user-badge">👤 <span id="userNameDisplay">User</span></span>
+      <span id="userRoleBadge" class="badge badge-viewer">Viewer</span>
+      <button class="logout-btn" onclick="doLogout()">⏏ Logout</button>
+    </div>
+  </div>
+
+  <div id="broadcastBar" class="broadcast-bar">
+    📢 <strong>Owner Broadcast:</strong> <span id="broadcastMsg">System maintenance in 30 minutes. Please save your work.</span>
+  </div>
+
+  <div class="dash-body">
+
+    <!-- Overview Tab -->
+    <div id="tab-overview" class="user-tab">
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-label">Machine Status</div>
+          <div class="stat-value" style="font-size:1.2em;color:var(--g)">● ONLINE</div>
+          <div class="stat-sub">All systems nominal</div>
+        </div>
+        <div class="stat-card blue">
+          <div class="stat-label">Your Access Level</div>
+          <div class="stat-value" id="userAccessLevel" style="font-size:1.0em">VIEWER</div>
+          <div class="stat-sub">Granted by owner</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Session Time</div>
+          <div class="stat-value" id="sessionTimer">00:00</div>
+          <div class="stat-sub">Current session</div>
+        </div>
+        <div class="stat-card warn">
+          <div class="stat-label">Active Users</div>
+          <div class="stat-value" id="activeUserCount">4</div>
+          <div class="stat-sub">On machine now</div>
+        </div>
+      </div>
+
+      <div class="section-grid wide">
+        <div class="panel-box">
+          <div class="panel-title">Machine Live Metrics <span class="panel-title-right" id="liveTimestamp">Live</span></div>
+          <div class="machine-grid">
+            <div class="machine-metric">
+              <div class="metric-lbl">Heart Rate</div>
+              <div class="metric-val" id="m-hr">72 bpm</div>
+              <div class="metric-bar"><div class="metric-fill" id="mf-hr" style="width:50%;background:#ff4455"></div></div>
+            </div>
+            <div class="machine-metric">
+              <div class="metric-lbl">SpO₂</div>
+              <div class="metric-val" id="m-spo2">98 %</div>
+              <div class="metric-bar"><div class="metric-fill" id="mf-spo2" style="width:98%;background:#00aaff"></div></div>
+            </div>
+            <div class="machine-metric">
+              <div class="metric-lbl">Blood Pressure</div>
+              <div class="metric-val" id="m-bp">120/80</div>
+              <div class="metric-bar"><div class="metric-fill" id="mf-bp" style="width:65%;background:#ffaa00"></div></div>
+            </div>
+            <div class="machine-metric">
+              <div class="metric-lbl">Resp. Rate</div>
+              <div class="metric-val" id="m-rr">16 /min</div>
+              <div class="metric-bar"><div class="metric-fill" id="mf-rr" style="width:55%;background:#00ff88"></div></div>
+            </div>
+            <div class="machine-metric">
+              <div class="metric-lbl">EEG Alpha</div>
+              <div class="metric-val" id="m-eeg">10.4 Hz</div>
+              <div class="metric-bar"><div class="metric-fill" id="mf-eeg" style="width:42%;background:#aa44ff"></div></div>
+            </div>
+            <div class="machine-metric">
+              <div class="metric-lbl">Brain State</div>
+              <div class="metric-val" id="m-brain" style="font-size:0.75em">Awake</div>
+              <div class="metric-bar"><div class="metric-fill" id="mf-brain" style="width:70%;background:#aa44ff"></div></div>
+            </div>
+            <div class="machine-metric">
+              <div class="metric-lbl">Lung Volume</div>
+              <div class="metric-val" id="m-lung">3.2 L</div>
+              <div class="metric-bar"><div class="metric-fill" id="mf-lung" style="width:55%;background:#44aaff"></div></div>
+            </div>
+            <div class="machine-metric">
+              <div class="metric-lbl">Rhythm</div>
+              <div class="metric-val" id="m-rhythm" style="font-size:0.68em">Normal Sinus</div>
+              <div class="metric-bar"><div class="metric-fill" id="mf-rhythm" style="width:100%;background:#00ff88"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="panel-box" style="margin-bottom:12px">
+            <div class="panel-title">Your Permissions</div>
+            <div class="perm-row">
+              <div><div class="perm-name">View ECG</div><div class="perm-desc">Real-time ECG display</div></div>
+              <div class="toggle on" id="perm-view-ecg"></div>
+            </div>
+            <div class="perm-row">
+              <div><div class="perm-name">View 3D Organs</div><div class="perm-desc">Heart &amp; brain models</div></div>
+              <div class="toggle on" id="perm-view-organs"></div>
+            </div>
+            <div class="perm-row">
+              <div><div class="perm-name">Control Sliders</div><div class="perm-desc">Adjust HR, amplitude etc.</div></div>
+              <div class="toggle" id="perm-control"></div>
+            </div>
+            <div class="perm-row">
+              <div><div class="perm-name">Inject Faults</div><div class="perm-desc">Fault injection panel</div></div>
+              <div class="toggle" id="perm-faults"></div>
+            </div>
+            <div class="perm-row">
+              <div><div class="perm-name">Export Data</div><div class="perm-desc">Download CSV recordings</div></div>
+              <div class="toggle" id="perm-export"></div>
+            </div>
+          </div>
+          <div class="panel-box">
+            <div class="panel-title">System Info</div>
+            <div style="padding:10px 12px;font-family:var(--mono);font-size:0.62em;line-height:2;color:var(--dim);">
+              <div>Machine: <span style="color:var(--g)">NeuroCardio MedSim Pro v6.8</span></div>
+              <div>Uptime: <span style="color:var(--g)" id="machineUptime">14h 23m</span></div>
+              <div>Owner: <span style="color:var(--w)">System Admin</span></div>
+              <div>Location: <span style="color:var(--g)">Lab Server · Rack 3</span></div>
+              <div>IP: <span style="color:var(--b)">192.168.1.48</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Launch Tab -->
+    <div id="tab-launch" class="user-tab" style="display:none">
+      <div class="panel-box" style="max-width:600px;margin:0 auto;">
+        <div class="panel-title">Launch Machine Session</div>
+        <div style="padding:20px;">
+          <div class="form-group">
+            <label class="form-label">Session Mode</label>
+            <select class="form-input" id="sessionMode">
+              <option>View Only (No Controls)</option>
+              <option>Interactive (Controls Enabled)</option>
+              <option>Recording Mode</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Session Duration</label>
+            <select class="form-input" id="sessionDur">
+              <option>30 minutes</option>
+              <option>1 hour</option>
+              <option>2 hours</option>
+              <option>Unlimited</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Session Notes (optional)</label>
+            <textarea class="form-input announce-area" placeholder="Purpose of this session..."></textarea>
+          </div>
+          <div style="background:rgba(0,255,136,0.05);border:1px solid var(--border);border-radius:3px;padding:12px;margin-bottom:18px;font-family:var(--mono);font-size:0.62em;color:var(--dim);line-height:1.8;">
+            ⚠ Your access level: <span id="launchAccessNote" style="color:var(--g)">VIEWER</span><br>
+            You will be able to observe the machine in read-only mode.<br>
+            To request more permissions, contact the owner.
+          </div>
+          <button class="btn-primary" onclick="launchMachine()">🚀 LAUNCH MACHINE SESSION</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sessions Tab -->
+    <div id="tab-sessions" class="user-tab" style="display:none">
+      <div class="panel-box">
+        <div class="panel-title">My Session History</div>
+        <table class="user-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Duration</th>
+              <th>Mode</th>
+              <th>Status</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody id="sessionHistoryBody">
+            <tr>
+              <td>2026-03-02 10:14</td>
+              <td>47 min</td>
+              <td><span class="badge badge-viewer">View Only</span></td>
+              <td><span class="badge badge-offline">Completed</span></td>
+              <td>ECG observation study</td>
+            </tr>
+            <tr>
+              <td>2026-03-01 14:30</td>
+              <td>22 min</td>
+              <td><span class="badge badge-viewer">View Only</span></td>
+              <td><span class="badge badge-offline">Completed</span></td>
+              <td>Brain state analysis</td>
+            </tr>
+            <tr>
+              <td>2026-02-28 09:00</td>
+              <td>1h 12m</td>
+              <td><span class="badge badge-operator">Interactive</span></td>
+              <td><span class="badge badge-offline">Completed</span></td>
+              <td>Arrhythmia simulation</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div><!-- dash-body -->
+</div>
+
+<!-- ═══════════════════════════════════
+     MACHINE VIEWER (embedded frame)
+═══════════════════════════════════════ -->
+<div id="page-viewer" class="page" style="flex-direction:column">
+  <div class="dash-header" style="height:44px">
+    <div class="dash-logo" style="font-size:0.8em">NEURO<span>CARDIO</span> MedSim — <span style="color:var(--dim);font-size:0.8em">LIVE SESSION</span></div>
+    <div class="dash-right">
+      <span class="session-timer" id="viewerTimer">00:00:00</span>
+      <span class="permission-chip" id="viewerPermChip">VIEW ONLY</span>
+      <button class="logout-btn" onclick="exitViewer()">✕ Exit Session</button>
+    </div>
+  </div>
+  <div class="viewer-toolbar">
+    <span class="viewer-info">Machine: <span style="color:var(--g)">NeuroCardio MedSim Pro</span></span>
+    <span style="color:var(--dimmer)">|</span>
+    <span class="viewer-info">User: <span id="viewerUser" style="color:var(--g)">—</span></span>
+    <span style="color:var(--dimmer)">|</span>
+    <span class="viewer-info">Mode: <span id="viewerMode" style="color:var(--g)">View Only</span></span>
+    <div class="spacer"></div>
+    <button class="small-btn" onclick="exitViewer()">← Back to Dashboard</button>
+  </div>
+  <iframe id="machineFrame" class="viewer-frame" src="./NeuroCardio MedSim Pro — Access Portal_files/medical_sim_enhanced.html"></iframe>
+</div>
+
+<!-- ═══════════════════════════════════
+     OWNER DASHBOARD
+═══════════════════════════════════════ -->
+<div id="page-owner" class="page">
+  <div class="dash-header">
+    <div class="dash-logo">NEURO<span>CARDIO</span> MedSim</div>
+    <div class="dash-nav">
+      <div class="dash-nav-item active" onclick="setOwnerTab(&#39;own-users&#39;,this)">Users</div>
+      <div class="dash-nav-item" onclick="setOwnerTab(&#39;own-requests&#39;,this)">Requests <span id="reqBadge" style="background:rgba(255,170,0,0.2);border:1px solid rgba(255,170,0,0.5);color:var(--w);padding:1px 5px;border-radius:10px;font-size:0.8em">2</span></div>
+      <div class="dash-nav-item" onclick="setOwnerTab(&#39;own-machine&#39;,this)">Machine</div>
+      <div class="dash-nav-item" onclick="setOwnerTab(&#39;own-log&#39;,this)">Activity Log</div>
+      <div class="dash-nav-item" onclick="setOwnerTab(&#39;own-settings&#39;,this)">Settings</div>
+    </div>
+    <div class="dash-right">
+      <span class="owner-badge">👑 OWNER</span>
+      <button class="small-btn primary" onclick="launchOwnerMachine()">🚀 Launch Machine</button>
+      <button class="logout-btn" onclick="doLogout()">⏏ Logout</button>
+    </div>
+  </div>
+
+  <div class="dash-body">
+
+    <!-- Owner Stats -->
+    <div class="stats-row" style="margin-bottom:18px">
+      <div class="stat-card">
+        <div class="stat-label">Machine Status</div>
+        <div class="stat-value" style="font-size:1.1em">● ONLINE</div>
+        <div class="stat-sub">Uptime 14h 23m</div>
+      </div>
+      <div class="stat-card blue">
+        <div class="stat-label">Active Sessions</div>
+        <div class="stat-value" id="own-activeSessions">3</div>
+        <div class="stat-sub">Users online now</div>
+      </div>
+      <div class="stat-card warn">
+        <div class="stat-label">Pending Requests</div>
+        <div class="stat-value" id="own-pendingReqs">2</div>
+        <div class="stat-sub">Awaiting approval</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Total Users</div>
+        <div class="stat-value" id="own-totalUsers">8</div>
+        <div class="stat-sub">Registered accounts</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Sessions Today</div>
+        <div class="stat-value">12</div>
+        <div class="stat-sub">Since midnight</div>
+      </div>
+    </div>
+
+    <!-- USERS TAB -->
+    <div id="own-users" class="owner-tab">
+      <div class="panel-box">
+        <div class="panel-title">
+          Registered Users
+          <span class="panel-title-right">
+            <button class="small-btn primary" onclick="showAddUserModal()">+ Add User</button>
+          </span>
+        </div>
+        <table class="user-table">
+          <thead>
+            <tr>
+              <th>User</th>
+              <th>Email</th>
+              <th>Role</th>
+              <th>Status</th>
+              <th>Last Seen</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="userTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- REQUESTS TAB -->
+    <div id="own-requests" class="owner-tab" style="display:none">
+      <div class="panel-box">
+        <div class="panel-title">Access Requests</div>
+        <table class="user-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Institution</th>
+              <th>Level Requested</th>
+              <th>Reason</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="requestTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- MACHINE TAB -->
+    <div id="own-machine" class="owner-tab" style="display:none">
+      <div class="section-grid wide">
+        <div>
+          <div class="machine-card">
+            <div class="machine-header">
+              <div class="machine-name">
+                <span class="machine-status-dot"></span>
+                NeuroCardio MedSim Pro v6.8
+              </div>
+              <div class="flex-row">
+                <button class="small-btn danger" onclick="showConfirm(&#39;Restart machine? All sessions will be disconnected.&#39;,&#39;restartMachine&#39;)">↺ Restart</button>
+                <button class="small-btn danger" onclick="showConfirm(&#39;EMERGENCY STOP? All sessions will end immediately.&#39;,&#39;emergencyStop&#39;)">⏹ E-Stop</button>
+              </div>
+            </div>
+            <div class="machine-grid">
+              <div class="machine-metric">
+                <div class="metric-lbl">CPU Load</div>
+                <div class="metric-val" id="ow-cpu">34%</div>
+                <div class="metric-bar"><div class="metric-fill" id="mf-cpu" style="width:34%;background:#00ff88"></div></div>
+              </div>
+              <div class="machine-metric">
+                <div class="metric-lbl">Memory</div>
+                <div class="metric-val" id="ow-mem">61%</div>
+                <div class="metric-bar"><div class="metric-fill" id="mf-mem" style="width:61%;background:#00aaff"></div></div>
+              </div>
+              <div class="machine-metric">
+                <div class="metric-lbl">Frame Rate</div>
+                <div class="metric-val" id="ow-fps">61 fps</div>
+                <div class="metric-bar"><div class="metric-fill" id="mf-fps" style="width:100%;background:#00ff88"></div></div>
+              </div>
+              <div class="machine-metric">
+                <div class="metric-lbl">Network I/O</div>
+                <div class="metric-val" id="ow-net">2.1 MB/s</div>
+                <div class="metric-bar"><div class="metric-fill" id="mf-net" style="width:21%;background:#aa44ff"></div></div>
+              </div>
+              <div class="machine-metric">
+                <div class="metric-lbl">Heart Rate</div>
+                <div class="metric-val" id="ow-hr">72 bpm</div>
+                <div class="metric-bar"><div class="metric-fill" style="width:50%;background:#ff4455"></div></div>
+              </div>
+              <div class="machine-metric">
+                <div class="metric-lbl">Simulation Mode</div>
+                <div class="metric-val" id="ow-mode" style="font-size:0.7em">Normal Sinus</div>
+                <div class="metric-bar"><div class="metric-fill" style="width:100%;background:#00ff88"></div></div>
+              </div>
+              <div class="machine-metric">
+                <div class="metric-lbl">Active Faults</div>
+                <div class="metric-val" id="ow-faults">None</div>
+                <div class="metric-bar"><div class="metric-fill" style="width:0%;background:#ff3344"></div></div>
+              </div>
+              <div class="machine-metric">
+                <div class="metric-lbl">Uptime</div>
+                <div class="metric-val" id="ow-uptime">14:23:07</div>
+                <div class="metric-bar"><div class="metric-fill" style="width:100%;background:#00ff88"></div></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel-box">
+            <div class="panel-title">Broadcast Message to All Users</div>
+            <div style="padding:12px;">
+              <textarea class="announce-area" id="broadcastInput" placeholder="Type message to broadcast to all connected users..."></textarea>
+              <div class="flex-row" style="margin-top:8px">
+                <button class="small-btn primary" onclick="sendBroadcast()">📢 Broadcast</button>
+                <button class="small-btn danger" onclick="clearBroadcast()">✕ Clear</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="panel-box" style="margin-bottom:12px">
+            <div class="panel-title">Active Sessions</div>
+            <div id="activeSessionsList"></div>
+          </div>
+          <div class="panel-box">
+            <div class="panel-title">Machine Controls</div>
+            <div style="padding:8px 0">
+              <div class="perm-row">
+                <div><div class="perm-name">Lock All Controls</div><div class="perm-desc">Prevent users from interacting</div></div>
+                <div class="toggle" id="ctrl-lock" onclick="toggleCtrl(this)"></div>
+              </div>
+              <div class="perm-row">
+                <div><div class="perm-name">Allow Recording</div><div class="perm-desc">Users can record data</div></div>
+                <div class="toggle on" id="ctrl-record" onclick="toggleCtrl(this)"></div>
+              </div>
+              <div class="perm-row">
+                <div><div class="perm-name">Allow Export</div><div class="perm-desc">CSV data downloads</div></div>
+                <div class="toggle on" id="ctrl-export" onclick="toggleCtrl(this)"></div>
+              </div>
+              <div class="perm-row">
+                <div><div class="perm-name">Maintenance Mode</div><div class="perm-desc">Blocks all user access</div></div>
+                <div class="toggle" id="ctrl-maint" onclick="toggleCtrl(this)"></div>
+              </div>
+              <div class="perm-row">
+                <div><div class="perm-name">Allow New Logins</div><div class="perm-desc">Accept new sessions</div></div>
+                <div class="toggle on" id="ctrl-logins" onclick="toggleCtrl(this)"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ACTIVITY LOG TAB -->
+    <div id="own-log" class="owner-tab" style="display:none">
+      <div class="panel-box">
+        <div class="panel-title">
+          System Activity Log
+          <span class="panel-title-right">
+            <button class="small-btn" onclick="clearLog()">✕ Clear</button>
+          </span>
+        </div>
+        <div class="log-list" id="ownerLogList"></div>
+      </div>
+    </div>
+
+    <!-- SETTINGS TAB -->
+    <div id="own-settings" class="owner-tab" style="display:none">
+      <div class="section-grid">
+        <div class="panel-box">
+          <div class="panel-title">Default Permissions by Role</div>
+          <div style="padding:8px 0">
+            <div style="padding:6px 12px;font-family:var(--mono);font-size:0.6em;color:var(--dim);border-bottom:1px solid var(--dimmer);letter-spacing:0.1em;">VIEWER ROLE</div>
+            <div class="perm-row"><div><div class="perm-name">View ECG</div></div><div class="toggle on" onclick="toggleCtrl(this)"></div></div>
+            <div class="perm-row"><div><div class="perm-name">View 3D Organs</div></div><div class="toggle on" onclick="toggleCtrl(this)"></div></div>
+            <div class="perm-row"><div><div class="perm-name">Control Sliders</div></div><div class="toggle" onclick="toggleCtrl(this)"></div></div>
+            <div class="perm-row"><div><div class="perm-name">Fault Injection</div></div><div class="toggle" onclick="toggleCtrl(this)"></div></div>
+
+            <div style="padding:6px 12px;font-family:var(--mono);font-size:0.6em;color:var(--dim);border-bottom:1px solid var(--dimmer);border-top:1px solid var(--dimmer);letter-spacing:0.1em;margin-top:4px;">OPERATOR ROLE</div>
+            <div class="perm-row"><div><div class="perm-name">All Viewer Perms</div></div><div class="toggle on" onclick="toggleCtrl(this)"></div></div>
+            <div class="perm-row"><div><div class="perm-name">Control Sliders</div></div><div class="toggle on" onclick="toggleCtrl(this)"></div></div>
+            <div class="perm-row"><div><div class="perm-name">Fault Injection</div></div><div class="toggle on" onclick="toggleCtrl(this)"></div></div>
+            <div class="perm-row"><div><div class="perm-name">Export Data</div></div><div class="toggle on" onclick="toggleCtrl(this)"></div></div>
+          </div>
+        </div>
+        <div class="panel-box">
+          <div class="panel-title">Session Settings</div>
+          <div style="padding:12px;">
+            <div class="form-group">
+              <label class="form-label">Default Session Timeout</label>
+              <select class="form-input"><option>1 hour</option><option>2 hours</option><option>4 hours</option><option>No limit</option></select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Max Concurrent Users</label>
+              <input class="form-input" type="number" value="10" min="1" max="50">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Owner Password</label>
+              <input class="form-input" type="password" placeholder="Change owner password...">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Machine URL / Embed Path</label>
+              <input class="form-input" type="text" value="medical_sim_enhanced.html">
+            </div>
+            <button class="small-btn primary" style="width:100%">💾 Save Settings</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- dash-body -->
+</div>
+
+<!-- ═══════════════════════════════════
+     ADD USER MODAL
+═══════════════════════════════════════ -->
+<div id="addUserModal" class="modal-overlay">
+  <div class="modal-box" style="max-width:460px">
+    <div class="modal-title">Add New User</div>
+    <div class="form-group"><label class="form-label">Username</label><input class="form-input" type="text" id="nu-name" placeholder="username"></div>
+    <div class="form-group"><label class="form-label">Email</label><input class="form-input" type="email" id="nu-email" placeholder="user@hospital.org"></div>
+    <div class="form-group"><label class="form-label">Access Code</label><input class="form-input" type="text" id="nu-pass" placeholder="Temporary password"></div>
+    <div class="form-group"><label class="form-label">Role</label>
+      <select class="form-input" id="nu-role">
+        <option value="viewer">Viewer</option>
+        <option value="operator">Operator</option>
+        <option value="admin">Admin</option>
+      </select>
+    </div>
+    <div class="modal-btns" style="margin-top:4px">
+      <button class="modal-btn modal-btn-cancel" onclick="closeModal(&#39;addUserModal&#39;)">Cancel</button>
+      <button class="modal-btn modal-btn-ok" onclick="addUser()">Add User</button>
+    </div>
+  </div>
+</div>
+
+<!-- CONFIRM MODAL -->
+<div id="confirmModal" class="modal-overlay">
+  <div class="modal-box">
+    <div class="modal-title" style="color:var(--r)">⚠ Confirm Action</div>
+    <div class="modal-body" id="confirmText">Are you sure?</div>
+    <div class="modal-btns">
+      <button class="modal-btn modal-btn-cancel" onclick="closeModal(&#39;confirmModal&#39;)">Cancel</button>
+      <button class="modal-btn" style="background:rgba(255,51,68,0.1);border:1px solid var(--r);color:var(--r)" onclick="confirmAction()">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+//  DATA
+// ═══════════════════════════════════════════════════════════════
+const OWNER_CREDS = { user: 'KAI', pass: 'Kai@2007' };
+
+let currentRole = 'user'; // 'user' | 'owner'
+let currentUser = '';
+let sessionStart = 0;
+let viewerTimerInt = null;
+let confirmCallback = null;
+
+let users = [
+  { id:1, name:'Dr. Sharma', email:'sharma@hospital.in', role:'operator', status:'online', lastSeen:'Now', pass:'doc123' },
+  { id:2, name:'Dr. Patel',  email:'patel@cardio.in',    role:'viewer',   status:'online', lastSeen:'Now', pass:'pat456' },
+  { id:3, name:'Nurse Rani', email:'rani@icu.in',         role:'viewer',   status:'offline',lastSeen:'2h ago', pass:'ran789' },
+  { id:4, name:'Lab Tech A', email:'tech@lab.in',          role:'operator', status:'online', lastSeen:'Now', pass:'tec111' },
+  { id:5, name:'Intern B',   email:'intern@hospital.in',  role:'viewer',   status:'offline',lastSeen:'Yesterday', pass:'int222' },
+];
+
+let requests = [
+  { id:1, name:'Dr. Meena',    email:'meena@neuro.in',  org:'AIIMS Neurology', level:'operator', reason:'EEG pattern study for research paper' },
+  { id:2, name:'Prof. Verma',  email:'verma@iit.ac.in', org:'IIT Delhi Dept.',  level:'admin',    reason:'Teaching simulation for med students' },
+];
+
+let activityLog = [
+  { time:'22:20:14', type:'ok',   msg:'Dr. Sharma connected — Session started' },
+  { time:'22:19:55', type:'ok',   msg:'Dr. Patel connected — View only mode' },
+  { time:'22:15:30', type:'info', msg:'Machine restarted by owner' },
+  { time:'22:14:02', type:'warn', msg:'Lab Tech A injected fault: 50Hz noise' },
+  { time:'22:10:45', type:'ok',   msg:'Owner launched machine session' },
+  { time:'22:08:12', type:'info', msg:'Access request: Dr. Meena (operator)' },
+  { time:'22:01:00', type:'warn', msg:'Intern B attempted unauthorized control' },
+  { time:'21:55:33', type:'ok',   msg:'Nurse Rani session ended (20 min)' },
+  { time:'21:40:00', type:'info', msg:'System boot — all modules initialized' },
+];
+
+let activeSessions = [
+  { user:'Dr. Sharma', role:'operator', duration:'1h 12m', ip:'192.168.1.22' },
+  { user:'Dr. Patel',  role:'viewer',   duration:'42m',    ip:'192.168.1.31' },
+  { user:'Lab Tech A', role:'operator', duration:'18m',    ip:'192.168.1.55' },
+];
+
+// ═══════════════════════════════════════════════════════════════
+//  PAGE ROUTING
+// ═══════════════════════════════════════════════════════════════
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  LOGIN
+// ═══════════════════════════════════════════════════════════════
+let loginRole = 'user';
+function setRole(r, el) {
+  loginRole = r;
+  document.querySelectorAll('.role-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function doLogin() {
+  const u = document.getElementById('loginUser').value.trim();
+  const p = document.getElementById('loginPass').value.trim();
+  const err = document.getElementById('errorMsg');
+  const ok  = document.getElementById('successMsg');
+  err.classList.remove('show');
+  ok.classList.remove('show');
+
+  // Owner check
+  if (loginRole === 'owner') {
+    if (u === OWNER_CREDS.user && p === OWNER_CREDS.pass) {
+      ok.textContent = '✓ Owner authenticated. Loading dashboard...';
+      ok.classList.add('show');
+      currentRole = 'owner';
+      currentUser = 'Owner';
+      setTimeout(() => {
+        showPage('page-owner');
+        initOwnerDash();
+      }, 800);
+      return;
+    }
+    err.textContent = '⚠ Owner credentials invalid.';
+    err.classList.add('show');
+    return;
+  }
+
+  // User check (registered users only)
+  const found = users.find(usr => (usr.name.toLowerCase().replace(/\s/g,'') === u.toLowerCase() || usr.email === u) && usr.pass === p);
+  if (found) {
+    loginAsUser(found);
+    return;
+  }
+  err.textContent = '⚠ Invalid credentials. Access denied.';
+  err.classList.add('show');
+}
+
+function loginAsUser(user) {
+  const ok = document.getElementById('successMsg');
+  ok.textContent = '✓ Authenticated. Loading your dashboard...';
+  ok.classList.add('show');
+  currentRole = 'user';
+  currentUser = user.name;
+  sessionStart = Date.now();
+  setTimeout(() => {
+    showPage('page-user');
+    initUserDash(user);
+  }, 800);
+  addLog('ok', user.name + ' logged in');
+}
+
+function doLogout() {
+  currentRole = '';
+  currentUser = '';
+  document.getElementById('loginUser').value = '';
+  document.getElementById('loginPass').value = '';
+  document.getElementById('successMsg').classList.remove('show');
+  document.getElementById('errorMsg').classList.remove('show');
+  showPage('page-login');
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  USER DASHBOARD
+// ═══════════════════════════════════════════════════════════════
+function initUserDash(user) {
+  document.getElementById('userNameDisplay').textContent = user.name || 'User';
+  const role = user.role || 'viewer';
+  const roleEl = document.getElementById('userRoleBadge');
+  roleEl.textContent = role.toUpperCase();
+  roleEl.className = 'badge badge-' + role;
+  document.getElementById('userAccessLevel').textContent = role.toUpperCase();
+  document.getElementById('launchAccessNote').textContent = role.toUpperCase();
+
+  // Permissions based on role
+  const isOp = role === 'operator' || role === 'admin';
+  setToggle('perm-control', isOp);
+  setToggle('perm-faults', isOp);
+  setToggle('perm-export', isOp);
+
+  // Session timer
+  clearInterval(viewerTimerInt);
+  viewerTimerInt = setInterval(() => {
+    const elapsed = Math.floor((Date.now() - sessionStart) / 1000);
+    const m = String(Math.floor(elapsed/60)).padStart(2,'0');
+    const s = String(elapsed%60).padStart(2,'0');
+    const el = document.getElementById('sessionTimer');
+    if(el) el.textContent = m+':'+s;
+  }, 1000);
+
+  // Live metric animation
+  startLiveMetrics();
+  // Show broadcast
+  document.getElementById('broadcastBar').classList.add('show');
+}
+
+function setToggle(id, on) {
+  const el = document.getElementById(id);
+  if(!el) return;
+  el.classList.toggle('on', on);
+}
+
+function setUserTab(tabId, el) {
+  document.querySelectorAll('.user-tab').forEach(t => t.style.display = 'none');
+  document.getElementById(tabId).style.display = 'block';
+  document.querySelectorAll('.dash-nav-item').forEach(n => n.classList.remove('active'));
+  if(el) el.classList.add('active');
+}
+
+function launchMachine() {
+  document.getElementById('viewerUser').textContent = currentUser;
+  const mode = document.getElementById('sessionMode').value;
+  document.getElementById('viewerMode').textContent = mode;
+  document.getElementById('viewerPermChip').textContent = mode.includes('View') ? 'VIEW ONLY' : 'INTERACTIVE';
+  startViewerTimer();
+  showPage('page-viewer');
+  addLog('ok', currentUser + ' launched machine session (' + mode + ')');
+}
+
+function exitViewer() {
+  clearInterval(viewerTimerInt);
+  showPage('page-user');
+}
+
+let viewerSecs = 0;
+function startViewerTimer() {
+  viewerSecs = 0;
+  clearInterval(viewerTimerInt);
+  viewerTimerInt = setInterval(() => {
+    viewerSecs++;
+    const h = String(Math.floor(viewerSecs/3600)).padStart(2,'0');
+    const m = String(Math.floor((viewerSecs%3600)/60)).padStart(2,'0');
+    const s = String(viewerSecs%60).padStart(2,'0');
+    const el = document.getElementById('viewerTimer');
+    if(el) el.textContent = h+':'+m+':'+s;
+  }, 1000);
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  OWNER DASHBOARD
+// ═══════════════════════════════════════════════════════════════
+function initOwnerDash() {
+  renderUserTable();
+  renderRequestTable();
+  renderActiveSessions();
+  renderLog();
+  startOwnerMetrics();
+}
+
+function setOwnerTab(tabId, el) {
+  document.querySelectorAll('.owner-tab').forEach(t => t.style.display='none');
+  document.getElementById(tabId).style.display='block';
+  document.querySelectorAll('.dash-nav-item').forEach(n=>n.classList.remove('active'));
+  if(el) el.classList.add('active');
+}
+
+function launchOwnerMachine() {
+  document.getElementById('viewerUser').textContent = 'Owner';
+  document.getElementById('viewerMode').textContent = 'Full Control';
+  document.getElementById('viewerPermChip').textContent = 'FULL ACCESS';
+  document.getElementById('viewerPermChip').classList.remove('locked');
+  startViewerTimer();
+  showPage('page-viewer');
+  addLog('ok', 'Owner launched machine session');
+}
+
+function renderUserTable() {
+  const tbody = document.getElementById('userTableBody');
+  tbody.innerHTML = '';
+  users.forEach(u => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${u.name}</td>
+      <td style="color:var(--dim)">${u.email}</td>
+      <td><span class="badge badge-${u.role}">${u.role.toUpperCase()}</span></td>
+      <td><span class="badge badge-${u.status}">${u.status.toUpperCase()}</span></td>
+      <td style="color:var(--dim)">${u.lastSeen}</td>
+      <td>
+        <div class="action-btns">
+          <button class="act-btn act-view" onclick="viewUserDetail(${u.id})">View</button>
+          <button class="act-btn act-approve" onclick="changeRole(${u.id})">Role</button>
+          ${u.status==='online'?`<button class="act-btn act-kick" onclick="kickUser(${u.id})">Kick</button>`:''}
+          <button class="act-btn act-deny" onclick="removeUser(${u.id})">Remove</button>
+        </div>
+      </td>`;
+    tbody.appendChild(tr);
+  });
+  document.getElementById('own-totalUsers').textContent = users.length;
+}
+
+function renderRequestTable() {
+  const tbody = document.getElementById('requestTableBody');
+  tbody.innerHTML = '';
+  requests.forEach(r => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${r.name}</td>
+      <td style="color:var(--dim)">${r.email}</td>
+      <td style="color:var(--dim)">${r.org}</td>
+      <td><span class="badge badge-${r.level}">${r.level.toUpperCase()}</span></td>
+      <td style="color:var(--dim);max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${r.reason}</td>
+      <td>
+        <div class="action-btns">
+          <button class="act-btn act-approve" onclick="approveRequest(${r.id})">✓ Approve</button>
+          <button class="act-btn act-deny" onclick="denyRequest(${r.id})">✕ Deny</button>
+        </div>
+      </td>`;
+    tbody.appendChild(tr);
+  });
+  const count = requests.length;
+  document.getElementById('own-pendingReqs').textContent = count;
+  document.getElementById('reqBadge').textContent = count;
+  document.getElementById('reqBadge').style.display = count ? 'inline' : 'none';
+}
+
+function renderActiveSessions() {
+  const el = document.getElementById('activeSessionsList');
+  if(!el) return;
+  el.innerHTML = '';
+  activeSessions.forEach((s,i) => {
+    const div = document.createElement('div');
+    div.style.cssText = 'padding:8px 12px;border-bottom:1px solid var(--dimmer);font-family:var(--mono);font-size:0.62em;';
+    div.innerHTML = `
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+        <span style="color:var(--g)"><span style="color:var(--g);font-size:0.8em">●</span> ${s.user}</span>
+        <span class="badge badge-${s.role}" style="font-size:0.8em">${s.role.toUpperCase()}</span>
+        <span style="color:var(--dim)">${s.duration}</span>
+        <button class="act-btn act-kick" onclick="kickSession(${i})" style="font-size:0.7em">Kick</button>
+      </div>
+      <div style="color:var(--dimmer);margin-top:3px">IP: ${s.ip}</div>`;
+    el.appendChild(div);
+  });
+  document.getElementById('own-activeSessions').textContent = activeSessions.length;
+}
+
+function renderLog() {
+  const el = document.getElementById('ownerLogList');
+  if(!el) return;
+  el.innerHTML = '';
+  activityLog.forEach(entry => {
+    const div = document.createElement('div');
+    div.className = 'log-item';
+    div.innerHTML = `<span class="log-time">${entry.time}</span><span class="log-type ${entry.type}">${entry.type.toUpperCase()}</span><span class="log-msg">${entry.msg}</span>`;
+    el.appendChild(div);
+  });
+}
+
+function addLog(type, msg) {
+  const now = new Date();
+  const pad = n => String(n).padStart(2,'0');
+  const time = `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+  activityLog.unshift({ time, type, msg });
+  if(activityLog.length > 100) activityLog.pop();
+  renderLog();
+}
+
+// User actions
+function approveRequest(id) {
+  const req = requests.find(r=>r.id===id);
+  if(!req) return;
+  users.push({ id: Date.now(), name:req.name, email:req.email, role:req.level, status:'offline', lastSeen:'Never', pass:'temp'+Math.random().toString(36).slice(2,6) });
+  requests = requests.filter(r=>r.id!==id);
+  addLog('ok', 'Access approved for ' + req.name + ' (' + req.level + ')');
+  renderUserTable();
+  renderRequestTable();
+}
+function denyRequest(id) {
+  const req = requests.find(r=>r.id===id);
+  requests = requests.filter(r=>r.id!==id);
+  addLog('warn', 'Access denied for ' + (req?req.name:'user'));
+  renderRequestTable();
+}
+function kickUser(id) {
+  const u = users.find(u=>u.id===id);
+  if(!u) return;
+  u.status = 'offline';
+  activeSessions = activeSessions.filter(s=>s.user!==u.name);
+  addLog('warn', u.name + ' was kicked by owner');
+  renderUserTable();
+  renderActiveSessions();
+}
+function kickSession(i) {
+  const s = activeSessions[i];
+  if(s){
+    addLog('warn', s.user + ' session terminated by owner');
+    activeSessions.splice(i,1);
+  }
+  renderActiveSessions();
+}
+function removeUser(id) {
+  const u = users.find(u=>u.id===id);
+  users = users.filter(u=>u.id!==id);
+  addLog('warn', (u?u.name:'User') + ' removed by owner');
+  renderUserTable();
+}
+function changeRole(id) {
+  const u = users.find(u=>u.id===id);
+  if(!u) return;
+  const roles = ['viewer','operator','admin'];
+  u.role = roles[(roles.indexOf(u.role)+1)%roles.length];
+  addLog('info', u.name + ' role changed to ' + u.role);
+  renderUserTable();
+}
+function viewUserDetail(id) {
+  const u = users.find(u=>u.id===id);
+  if(!u) return;
+  showConfirmCustom(`User: ${u.name}\nEmail: ${u.email}\nRole: ${u.role.toUpperCase()}\nStatus: ${u.status.toUpperCase()}\nLast Seen: ${u.lastSeen}`, null);
+}
+function addUser() {
+  const name = document.getElementById('nu-name').value.trim();
+  const email = document.getElementById('nu-email').value.trim();
+  const pass = document.getElementById('nu-pass').value.trim();
+  const role = document.getElementById('nu-role').value;
+  if(!name||!email||!pass) return;
+  users.push({ id:Date.now(), name, email, role, status:'offline', lastSeen:'Never', pass });
+  addLog('ok', 'New user added: ' + name + ' (' + role + ')');
+  closeModal('addUserModal');
+  renderUserTable();
+}
+function showAddUserModal() { document.getElementById('addUserModal').classList.add('show'); }
+
+function sendBroadcast() {
+  const msg = document.getElementById('broadcastInput').value.trim();
+  if(!msg) return;
+  document.getElementById('broadcastMsg').textContent = msg;
+  document.getElementById('broadcastBar').classList.add('show');
+  addLog('info', 'Broadcast sent: ' + msg.slice(0,40));
+}
+function clearBroadcast() {
+  document.getElementById('broadcastInput').value = '';
+  document.getElementById('broadcastBar').classList.remove('show');
+}
+function clearLog() { activityLog=[]; renderLog(); }
+
+function toggleCtrl(el) { el.classList.toggle('on'); }
+
+// ═══════════════════════════════════════════════════════════════
+//  MODALS
+// ═══════════════════════════════════════════════════════════════
+function showConfirm(text, cb) {
+  document.getElementById('confirmText').textContent = text;
+  confirmCallback = cb;
+  document.getElementById('confirmModal').classList.add('show');
+}
+function showConfirmCustom(text, cb) {
+  document.getElementById('confirmText').innerHTML = text.replace(/\n/g,'<br>');
+  confirmCallback = cb;
+  document.getElementById('confirmModal').classList.add('show');
+}
+function confirmAction() {
+  closeModal('confirmModal');
+  if(typeof confirmCallback === 'string') {
+    window[confirmCallback] && window[confirmCallback]();
+  }
+}
+function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+
+window.restartMachine = function() { addLog('warn','Machine restarted by owner'); }
+window.emergencyStop = function() {
+  activeSessions=[];
+  addLog('err','EMERGENCY STOP — all sessions terminated');
+  renderActiveSessions();
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  REQUEST ACCESS SUBMIT
+// ═══════════════════════════════════════════════════════════════
+function submitRequest() {
+  const name  = document.getElementById('reqName').value.trim();
+  const email = document.getElementById('reqEmail').value.trim();
+  const org   = document.getElementById('reqOrg').value.trim();
+  const level = document.getElementById('reqRole').value;
+  const reason= document.getElementById('reqReason').value.trim();
+  if(!name||!email) return;
+  requests.push({ id:Date.now(), name, email, org, level, reason });
+  addLog('info', 'Access request received from ' + name + ' (' + level + ')');
+  document.getElementById('reqSuccess').classList.add('show');
+  setTimeout(() => showPage('page-login'), 3000);
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  LIVE METRICS SIMULATION
+// ═══════════════════════════════════════════════════════════════
+let t0 = Date.now();
+function startLiveMetrics() {
+  setInterval(updateLiveMetrics, 2000);
+}
+function updateLiveMetrics() {
+  const t = (Date.now()-t0)/1000;
+  const hr = Math.round(72 + 3*Math.sin(t*0.3));
+  const spo2 = Math.min(100,Math.round(98 + Math.sin(t*0.2)));
+  const sys = Math.round(120 + 4*Math.sin(t*0.15));
+  const rr = Math.round(16 + Math.sin(t*0.4));
+  const eeg = (10.4 + 0.3*Math.sin(t*0.5)).toFixed(1);
+  const lv = (3.2 + 0.8*Math.sin(t*0.8)).toFixed(1);
+
+  const setM = (id, fill, val, w, bg) => {
+    const v = document.getElementById(id); if(v) v.textContent = val;
+    const f = document.getElementById(fill); if(f){ f.style.width=w+'%'; if(bg) f.style.background=bg; }
+  };
+  setM('m-hr',   'mf-hr',   hr+' bpm',   Math.min(100,(hr-20)/230*100), '#ff4455');
+  setM('m-spo2', 'mf-spo2', spo2+' %',   spo2, spo2<94?'#ff3344':'#00aaff');
+  setM('m-bp',   'mf-bp',   sys+'/'+Math.round(sys*0.65), Math.min(100,sys/200*100), '#ffaa00');
+  setM('m-rr',   'mf-rr',   rr+' /min',  Math.min(100,rr/40*100), '#00ff88');
+  setM('m-eeg',  'mf-eeg',  eeg+' Hz',   Math.min(100,eeg/40*100), '#aa44ff');
+  setM('m-lung', 'mf-lung', lv+' L',     Math.min(100,lv/5*100), '#44aaff');
+
+  const ts = document.getElementById('liveTimestamp');
+  if(ts) ts.textContent = new Date().toLocaleTimeString();
+}
+
+function startOwnerMetrics() {
+  setInterval(updateOwnerMetrics, 2500);
+}
+function updateOwnerMetrics() {
+  const t = (Date.now()-t0)/1000;
+  const cpu = Math.round(34 + 8*Math.sin(t*0.4));
+  const mem = Math.round(61 + 4*Math.sin(t*0.25));
+  const fps = Math.round(60 + 2*Math.sin(t*1.5));
+  const net = (2.1 + 0.5*Math.sin(t*0.6)).toFixed(1);
+
+  const s=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
+  const f=(id,w,bg)=>{const e=document.getElementById(id);if(e){e.style.width=w+'%';if(bg)e.style.background=bg;}};
+  s('ow-cpu',cpu+'%'); f('mf-cpu',cpu, cpu>80?'#ff3344':cpu>60?'#ffaa00':'#00ff88');
+  s('ow-mem',mem+'%'); f('mf-mem',mem, mem>80?'#ff3344':mem>60?'#ffaa00':'#00aaff');
+  s('ow-fps',fps+' fps'); f('mf-fps',fps/60*100,'#00ff88');
+  s('ow-net',net+' MB/s'); f('mf-net',Math.min(100,net/10*100),'#aa44ff');
+
+  // Update uptime
+  const up = Math.floor((Date.now()-t0)/1000);
+  const h=Math.floor(up/3600),m=Math.floor((up%3600)/60),sec=up%60;
+  const pad=n=>String(n).padStart(2,'0');
+  s('ow-uptime', `14:${pad(m)}:${pad(sec)}`);
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  CLOCK
+// ═══════════════════════════════════════════════════════════════
+function updateClock() {
+  const now = new Date(), pad = n => String(n).padStart(2,'0');
+  const t = `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+  const el = document.getElementById('loginClock');
+  if(el) el.textContent = t;
+}
+setInterval(updateClock, 1000);
+updateClock();
+
+// Close modals on overlay click
+document.querySelectorAll('.modal-overlay').forEach(m => {
+  m.addEventListener('click', e => { if(e.target===m) m.classList.remove('show'); });
+});
+
+// Enter key on login
+document.getElementById('loginPass').addEventListener('keydown', e => {
+  if(e.key==='Enter') doLogin();
+});
+</script>
+
+
+</body></html>
